@@ -2,7 +2,7 @@
 {
     using Values;
 
-    public class UpstreamPathTemplateBuilder
+    public class UpstreamPathTemplateBuilder : IBuilder<UpstreamPathTemplate>
     {
         private string _template;
         private int _priority;

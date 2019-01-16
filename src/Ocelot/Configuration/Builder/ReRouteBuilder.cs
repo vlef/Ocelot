@@ -5,7 +5,7 @@
     using Ocelot.Values;
     using System.Linq;
 
-    public class ReRouteBuilder
+    public class ReRouteBuilder : IBuilder<ReRoute>
     {
         private UpstreamPathTemplate _upstreamTemplatePattern;
         private List<HttpMethod> _upstreamHttpMethod;
@@ -57,9 +57,9 @@
         public ReRoute Build()
         {
             return new ReRoute(
-                _downstreamReRoutes, 
-                _upstreamHttpMethod, 
-                _upstreamTemplatePattern, 
+                _downstreamReRoutes,
+                _upstreamHttpMethod,
+                _upstreamTemplatePattern,
                 _upstreamHost,
                 _aggregator
                 );

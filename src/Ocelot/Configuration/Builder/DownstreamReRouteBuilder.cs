@@ -6,7 +6,7 @@ using Ocelot.Configuration.Creator;
 
 namespace Ocelot.Configuration.Builder
 {
-    public class DownstreamReRouteBuilder
+    public class DownstreamReRouteBuilder : IBuilder<DownstreamReRoute>
     {
         private AuthenticationOptions _authenticationOptions;
         private string _loadBalancerKey;

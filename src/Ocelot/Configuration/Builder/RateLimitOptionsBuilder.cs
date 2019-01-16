@@ -2,7 +2,7 @@
 
 namespace Ocelot.Configuration.Builder
 {
-    public class RateLimitOptionsBuilder
+    public class RateLimitOptionsBuilder : IBuilder<RateLimitOptions>
     {
         private bool _enableRateLimiting;
         private string _clientIdHeader;

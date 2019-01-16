@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Ocelot.Configuration.Builder
 {
-    public class AuthenticationOptionsBuilder
+    public class AuthenticationOptionsBuilder : IBuilder<AuthenticationOptions>
     {
         private List<string> _allowedScopes = new List<string>();
         private string _authenticationProviderKey;

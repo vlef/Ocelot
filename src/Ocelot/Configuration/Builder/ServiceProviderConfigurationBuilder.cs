@@ -1,6 +1,6 @@
 namespace Ocelot.Configuration.Builder
 {
-    public class ServiceProviderConfigurationBuilder
+    public class ServiceProviderConfigurationBuilder : IBuilder<ServiceProviderConfiguration>
     {
         private string _serviceDiscoveryProviderHost;
         private int _serviceDiscoveryProviderPort;

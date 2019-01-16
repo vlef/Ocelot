@@ -1,6 +1,6 @@
 ﻿namespace Ocelot.Configuration.Builder
 {
-    public class QoSOptionsBuilder
+    public class QoSOptionsBuilder : IBuilder<QoSOptions>
     {
         private int _exceptionsAllowedBeforeBreaking;
 

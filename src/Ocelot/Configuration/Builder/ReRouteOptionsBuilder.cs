@@ -1,6 +1,6 @@
 namespace Ocelot.Configuration.Builder
 {
-    public class ReRouteOptionsBuilder
+    public class ReRouteOptionsBuilder : IBuilder<ReRouteOptions>
     {
         private bool _isAuthenticated;
         private bool _isAuthorised;
