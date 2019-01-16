@@ -9,6 +9,7 @@
             LoadBalancerOptions = new FileLoadBalancerOptions();
             QoSOptions = new FileQoSOptions();
             HttpHandlerOptions = new FileHttpHandlerOptions();
+            CacheOptions = new FileCacheOptions();
         }
 
         public string RequestIdKey { get; set; }
@@ -26,5 +27,7 @@
         public string DownstreamScheme { get; set; }
 
         public FileHttpHandlerOptions HttpHandlerOptions { get; set; }
+
+        public FileCacheOptions CacheOptions { get; set; }
     }
 }

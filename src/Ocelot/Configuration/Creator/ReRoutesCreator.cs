@@ -22,6 +22,7 @@ namespace Ocelot.Configuration.Creator
         private readonly IDownstreamAddressesCreator _downstreamAddressesCreator;
         private readonly IReRouteKeyCreator _reRouteKeyCreator;
         private readonly ISecurityOptionsCreator _securityOptionsCreator;
+        private readonly ICacheOptionsCreator _cacheOptionsCreator;
 
         public ReRoutesCreator(
             IClaimsToThingCreator claimsToThingCreator,
@@ -37,7 +38,8 @@ namespace Ocelot.Configuration.Creator
             IDownstreamAddressesCreator downstreamAddressesCreator,
             ILoadBalancerOptionsCreator loadBalancerOptionsCreator,
             IReRouteKeyCreator reRouteKeyCreator,
-            ISecurityOptionsCreator securityOptionsCreator
+            ISecurityOptionsCreator securityOptionsCreator,
+            ICacheOptionsCreator cacheOptionsCreator
             )
         {
             _reRouteKeyCreator = reRouteKeyCreator;
@@ -55,6 +57,7 @@ namespace Ocelot.Configuration.Creator
             _httpHandlerOptionsCreator = httpHandlerOptionsCreator;
             _loadBalancerOptionsCreator = loadBalancerOptionsCreator;
             _securityOptionsCreator = securityOptionsCreator;
+            _cacheOptionsCreator = cacheOptionsCreator;
         }
 
         public List<ReRoute> Create(FileConfiguration fileConfiguration)
@@ -102,6 +105,8 @@ namespace Ocelot.Configuration.Creator
 
             var securityOptions = _securityOptionsCreator.Create(fileReRoute.SecurityOptions);
 
+            var cacheOptions = _cacheOptionsCreator.Create(fileReRoute.FileCacheOptions);
+
             var reRoute = new DownstreamReRouteBuilder()
                 .WithKey(fileReRoute.Key)
                 .WithDownstreamPathTemplate(fileReRoute.DownstreamPathTemplate)
@@ -116,7 +121,7 @@ namespace Ocelot.Configuration.Creator
                 .WithClaimsToQueries(claimsToQueries)
                 .WithRequestIdKey(requestIdKey)
                 .WithIsCached(fileReRouteOptions.IsCached)
-                .WithCacheOptions(new CacheOptions(fileReRoute.FileCacheOptions.TtlSeconds, region))
+                .WithCacheOptions(cacheOptions)
                 .WithDownstreamScheme(fileReRoute.DownstreamScheme)
                 .WithLoadBalancerOptions(lbOptions)
                 .WithDownstreamAddresses(downstreamAddresses)

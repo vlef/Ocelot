@@ -4,6 +4,7 @@ namespace Ocelot.UnitTests.Configuration
     using Microsoft.Extensions.DependencyInjection;
     using Moq;
     using Ocelot.Configuration;
+    using Ocelot.Configuration.Builder;
     using Ocelot.Configuration.Creator;
     using Ocelot.Configuration.File;
     using Ocelot.DependencyInjection;
@@ -19,6 +20,7 @@ namespace Ocelot.UnitTests.Configuration
         private readonly Mock<IQoSOptionsCreator> _qosCreator;
         private readonly Mock<IHttpHandlerOptionsCreator> _hhoCreator;
         private readonly Mock<ILoadBalancerOptionsCreator> _lboCreator;
+        private readonly Mock<ICacheOptionsCreator> _cacheCreator;
         private FileConfiguration _fileConfig;
         private List<ReRoute> _reRoutes;
         private ServiceProviderConfiguration _spc;
@@ -26,6 +28,7 @@ namespace Ocelot.UnitTests.Configuration
         private QoSOptions _qoso;
         private HttpHandlerOptions _hho;
         private AdministrationPath _adminPath;
+        private CacheOptions _cache;
         private readonly ServiceCollection _serviceCollection;
 
         public ConfigurationCreatorTests()
@@ -35,6 +38,7 @@ namespace Ocelot.UnitTests.Configuration
             _qosCreator = new Mock<IQoSOptionsCreator>();
             _spcCreator = new Mock<IServiceProviderConfigurationCreator>();
             _serviceCollection = new ServiceCollection();
+            _cacheCreator = new Mock<ICacheOptionsCreator>();
         }
 
         [Fact]
@@ -71,10 +75,11 @@ namespace Ocelot.UnitTests.Configuration
             _result.ServiceProviderConfiguration.ShouldBe(_spc);
             _result.LoadBalancerOptions.ShouldBe(_lbo);
             _result.QoSOptions.ShouldBe(_qoso);
+            _result.CacheOptions.ShouldBe(_cache);
             _result.HttpHandlerOptions.ShouldBe(_hho);
             _result.ReRoutes.ShouldBe(_reRoutes);
             _result.RequestId.ShouldBe(_fileConfig.GlobalConfiguration.RequestIdKey);
-            _result.DownstreamScheme.ShouldBe(_fileConfig.GlobalConfiguration.DownstreamScheme);
+            _result.DownstreamScheme.ShouldBe(_fileConfig.GlobalConfiguration.DownstreamScheme);            
         }
 
         private void ThenTheAdminPathIsSet()
@@ -88,6 +93,7 @@ namespace Ocelot.UnitTests.Configuration
             _lboCreator.Verify(x => x.Create(_fileConfig.GlobalConfiguration.LoadBalancerOptions), Times.Once);
             _qosCreator.Verify(x => x.Create(_fileConfig.GlobalConfiguration.QoSOptions), Times.Once);
             _hhoCreator.Verify(x => x.Create(_fileConfig.GlobalConfiguration.HttpHandlerOptions), Times.Once);
+            _cacheCreator.Verify(x => x.Create(_fileConfig.GlobalConfiguration.CacheOptions), Times.Once);
         }
 
         private void GivenTheAdminPath()
@@ -107,17 +113,19 @@ namespace Ocelot.UnitTests.Configuration
             _lbo = new LoadBalancerOptionsBuilder().Build();
             _qoso = new QoSOptions(1, 1, 1, "");
             _hho = new HttpHandlerOptionsBuilder().Build();
+            _cache = new CacheOptionsBuilder().Build();
 
             _spcCreator.Setup(x => x.Create(It.IsAny<FileGlobalConfiguration>())).Returns(_spc);
             _lboCreator.Setup(x => x.Create(It.IsAny<FileLoadBalancerOptions>())).Returns(_lbo);
             _qosCreator.Setup(x => x.Create(It.IsAny<FileQoSOptions>())).Returns(_qoso);
             _hhoCreator.Setup(x => x.Create(It.IsAny<FileHttpHandlerOptions>())).Returns(_hho);
+            _cacheCreator.Setup(x=> x.Create(It.IsAny<FileCacheOptions>())).Returns(_cache);
         }
 
         private void WhenICreate()
         {
             var serviceProvider = _serviceCollection.BuildServiceProvider();
-            _creator = new ConfigurationCreator(_spcCreator.Object, _qosCreator.Object, _hhoCreator.Object, serviceProvider, _lboCreator.Object);
+            _creator = new ConfigurationCreator(_spcCreator.Object, _qosCreator.Object, _hhoCreator.Object, serviceProvider, _lboCreator.Object, _cacheCreator.Object);
             _result = _creator.Create(_fileConfig, _reRoutes);
         }
     }

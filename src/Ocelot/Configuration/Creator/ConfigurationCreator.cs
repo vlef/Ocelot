@@ -13,13 +13,15 @@ namespace Ocelot.Configuration.Creator
         private readonly IHttpHandlerOptionsCreator _httpHandlerOptionsCreator;
         private readonly IAdministrationPath _adminPath;
         private readonly ILoadBalancerOptionsCreator _loadBalancerOptionsCreator;
+        private readonly ICacheOptionsCreator _cacheOptionsCreator;
 
         public ConfigurationCreator(
             IServiceProviderConfigurationCreator serviceProviderConfigCreator,
             IQoSOptionsCreator qosOptionsCreator,
             IHttpHandlerOptionsCreator httpHandlerOptionsCreator,
             IServiceProvider serviceProvider,
-            ILoadBalancerOptionsCreator loadBalancerOptionsCreator
+            ILoadBalancerOptionsCreator loadBalancerOptionsCreator,
+            ICacheOptionsCreator cacheOptionsCreator
             )
         {
             _adminPath = serviceProvider.GetService<IAdministrationPath>();
@@ -27,6 +29,7 @@ namespace Ocelot.Configuration.Creator
             _serviceProviderConfigCreator = serviceProviderConfigCreator;
             _qosOptionsCreator = qosOptionsCreator;
             _httpHandlerOptionsCreator = httpHandlerOptionsCreator;
+            _cacheOptionsCreator = cacheOptionsCreator;
         }
 
         public InternalConfiguration Create(FileConfiguration fileConfiguration, List<ReRoute> reRoutes)
@@ -38,6 +41,8 @@ namespace Ocelot.Configuration.Creator
             var qosOptions = _qosOptionsCreator.Create(fileConfiguration.GlobalConfiguration.QoSOptions);
 
             var httpHandlerOptions = _httpHandlerOptionsCreator.Create(fileConfiguration.GlobalConfiguration.HttpHandlerOptions);
+
+            var cacheOptions = _cacheOptionsCreator.Create(fileConfiguration.GlobalConfiguration.CacheOptions);
 
             var adminPath = _adminPath != null ? _adminPath.Path : null;
 

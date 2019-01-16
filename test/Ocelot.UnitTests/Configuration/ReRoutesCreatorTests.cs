@@ -46,7 +46,8 @@
         private List<DownstreamHostAndPort> _dhp;
         private LoadBalancerOptions _lbo;
         private List<ReRoute> _result;
-        private SecurityOptions _securityOptions;
+        //private SecurityOptions _securityOptions;
+        private Mock<ICacheOptionsCreator> _cacheCreator;
 
         public ReRoutesCreatorTests()
         {
@@ -64,6 +65,7 @@
             _lboCreator = new Mock<ILoadBalancerOptionsCreator>();
             _rrkCreator = new Mock<IReRouteKeyCreator>();
             _soCreator = new Mock<ISecurityOptionsCreator>();
+            _cacheCreator = new Mock<ICacheOptionsCreator>();
 
             _creator = new ReRoutesCreator(
                 _cthCreator.Object,
@@ -79,7 +81,8 @@
                 _daCreator.Object,
                 _lboCreator.Object,
                 _rrkCreator.Object,
-                _soCreator.Object
+                _soCreator.Object,
+                _cacheCreator.Object
                 );
         }
 

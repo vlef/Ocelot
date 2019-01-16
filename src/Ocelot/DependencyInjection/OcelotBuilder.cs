@@ -73,6 +73,7 @@ namespace Ocelot.DependencyInjection
             Services.TryAddSingleton<IRequestIdKeyCreator, RequestIdKeyCreator>();
             Services.TryAddSingleton<IServiceProviderConfigurationCreator,ServiceProviderConfigurationCreator>();
             Services.TryAddSingleton<IQoSOptionsCreator, QoSOptionsCreator>();
+            Services.TryAddSingleton<ICacheOptionsCreator, CacheOptionsCreator>();
             Services.TryAddSingleton<IReRouteOptionsCreator, ReRouteOptionsCreator>();
             Services.TryAddSingleton<IRateLimitOptionsCreator, RateLimitOptionsCreator>();
             Services.TryAddSingleton<IBaseUrlFinder, BaseUrlFinder>();
