@@ -1,6 +1,5 @@
 ﻿namespace Ocelot.UnitTests.Configuration
-{
-    using System;
+{    
     using System.Collections.Generic;
     using System.Linq;
     using Moq;
@@ -31,7 +30,7 @@
         private Mock<ILoadBalancerOptionsCreator> _lboCreator;
         private Mock<IReRouteKeyCreator> _rrkCreator;
         private Mock<ISecurityOptionsCreator> _soCreator;
-         private FileConfiguration _fileConfig;
+        private FileConfiguration _fileConfig;
         private ReRouteOptions _rro;
         private string _requestId;
         private string _rrk;
@@ -45,8 +44,8 @@
         private HeaderTransformations _ht;
         private List<DownstreamHostAndPort> _dhp;
         private LoadBalancerOptions _lbo;
+        private CacheOptions _cache;
         private List<ReRoute> _result;
-        //private SecurityOptions _securityOptions;
         private Mock<ICacheOptionsCreator> _cacheCreator;
 
         public ReRoutesCreatorTests()
@@ -172,6 +171,7 @@
             _ht = new HeaderTransformations(new List<HeaderFindAndReplace>(), new List<HeaderFindAndReplace>(), new List<AddHeader>(), new List<AddHeader>());
             _dhp = new List<DownstreamHostAndPort>();
             _lbo = new LoadBalancerOptionsBuilder().Build();
+            _cache = new CacheOptionsBuilder().WithRegion(_region).Build();
 
             _rroCreator.Setup(x => x.Create(It.IsAny<FileReRoute>())).Returns(_rro);
             _ridkCreator.Setup(x => x.Create(It.IsAny<FileReRoute>(), It.IsAny<FileGlobalConfiguration>())).Returns(_requestId);
@@ -186,6 +186,7 @@
             _hfarCreator.Setup(x => x.Create(It.IsAny<FileReRoute>())).Returns(_ht);
             _daCreator.Setup(x => x.Create(It.IsAny<FileReRoute>())).Returns(_dhp);
             _lboCreator.Setup(x => x.Create(It.IsAny<FileLoadBalancerOptions>())).Returns(_lbo);
+            _cacheCreator.Setup(x => x.Create(It.IsAny<FileCacheOptions>())).Returns(_cache);
         }
 
         private void ThenTheReRoutesAreCreated()

@@ -37,7 +37,7 @@ namespace Ocelot.Configuration.Builder
 
         public CacheOptions Build()
         {
-            throw new NotImplementedException();
+            return new CacheOptions(_ttl, _region);
         }
     }
 }
